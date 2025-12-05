@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# SQLite DB
+db.sqlite3
+
+# Django static collect
+/staticfiles/
+
+# PyCharm
+.idea/
+
+# OS
+.DS_Store

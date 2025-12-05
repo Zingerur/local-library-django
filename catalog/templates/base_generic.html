@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %}Local Library{% endblock %}</title>
+
+  <!-- ПОКИ ВИКОРИСТОВУЄМО ДЕФОЛТНІ СТИЛІ MDN -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Local Library</h1>
+      <p>A website developed in Django, following the MDN tutorial.</p>
+    </div>
+
+    <div class="row">
+
+      <!-- ЛІВИЙ САЙДБАР -->
+      <div class="col-md-3">
+        <ul class="sidebar-nav">
+
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="{% url 'books' %}">All books</a></li>
+          <li><a href="{% url 'authors' %}">All authors</a></li>
+
+          <hr>
+
+          {% if user.is_authenticated %}
+            <li><strong>User:</strong> {{ user.get_username }}</li>
+
+            <li><a href="{% url 'my-borrowed' %}">My borrowed books</a></li>
+
+            {% if perms.catalog.can_mark_returned %}
+              <li><a href="{% url 'all-borrowed' %}">All borrowed (librarian)</a></li>
+            {% endif %}
+
+            <li>
+              <form id="logout-form" method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link" style="padding:0; margin:0;">
+                  Logout
+                </button>
+              </form>
+            </li>
+
+          {% else %}
+            <li>
+              <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
+            </li>
+          {% endif %}
+
+        </ul>
+      </div>
+
+      <!-- ОСНОВНИЙ КОНТЕНТ -->
+      <div class="col-md-9">
+        {% block content %}
+        {% endblock %}
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
